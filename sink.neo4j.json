@@ -1,0 +1,20 @@
+{
+  "name": "Neo4jSinkConnectorJSONString",
+  "config": {
+    "topics": "nyc_taxicab_data",
+    "connector.class": "org.neo4j.connectors.kafka.sink.Neo4jConnector",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": false,
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": false,
+    "errors.retry.timeout": "-1",
+    "errors.retry.delay.max.ms": "1000",
+    "errors.tolerance": "all",
+    "errors.log.enable": true,
+    "errors.log.include.messages": true,
+    "neo4j.uri": "bolt://neo4j-service:7687",
+    "neo4j.authentication.basic.username": "neo4j",
+    "neo4j.authentication.basic.password": "project1phase2",
+    "neo4j.cypher.topic.nyc_taxicab_data": "MERGE (p:Location {name: toInteger(__value.PULocationID)}) MERGE (d:Location {name: toInteger(__value.DOLocationID)}) MERGE (p)-[:TRIP {distance: toFloat(__value.trip_distance), fare: toFloat(__value.fare_amount), pickup_dt: datetime(__value.tpep_pickup_datetime), dropoff_dt: datetime(__value.tpep_dropoff_datetime)}]->(d)"
+  }
+}

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-connect
+  labels:
+    app: kafka-connect
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-connect
+  template:
+    metadata:
+      labels:
+        app: kafka-connect
+    spec:
+      containers:
+        - name: kafka-connect
+          image: roy012299/kafka-neo4j-connect:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-connect-service
+spec:
+  selector:
+    app: kafka-connect
+  type: ClusterIP
+  ports:
+    - name: rest
+      port: 8083
+      targetPort: 8083
